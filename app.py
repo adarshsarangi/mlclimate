@@ -13,30 +13,57 @@ def index():
 def help():
     return render_template('help.html')
 
-@app.route('/predict', methods=['POST'])
+@app.route('/predict', methods=['GET','POST'])
 def predict():
     return render_template('predict2.html')
-
-def load_model():
-    with open('model.json','r') as fin : 
-        m = model_from_json(fin.read())
-    return m
 
 @app.route('/weather_predict', methods=['GET','POST'])
 def weather_predict():
     freq = request.form.get('frequency')[0].lower()
-    periods = request.form.get('period')
-    m = load_model()
-    future_dataframe = m.make_future_dataframe(freq=freq, periods=int(periods))
+    periods = int(request.form.get('period'))
+    what = request.form.get('what')
+    m = load_precipitation()
+    if what == 'temperature' : 
+        pass
+    elif what == 'wind' :
+        m = load_wind()
+    elif what == 'weather' :
+        pass
+    future_dataframe = m.make_future_dataframe(freq=freq, periods=periods)
     predictions = m.predict(future_dataframe)
-    predictions = pd.DataFrame(predictions,columns = ['ds','yhat'])
-    predictions['ds'] = predictions['ds'].dt.strftime('%Y-%m-%d')
-    predictions['yhat'] = round(predictions['yhat'], 3)
-    predictions = predictions[1460:1460+int(periods)]
-    json_data = predictions.to_json(orient='records')
+    df = pd.DataFrame(predictions,columns = ['ds','yhat'])
+    df['ds'] = df['ds'].dt.strftime('%Y-%m-%d')
+    df['yhat'] = round(df['yhat'], 3)
+    df = df[1460:1460+int(periods)]
+    json_data = df.to_json(orient='records')
     json_data = json.loads(json_data)
-    print(json_data)
     return render_template('prediction.html',json_data=json_data)
+
+def load_precipitation():
+    with open('model.json','r') as fin : 
+        m = model_from_json(fin.read())
+    return m
+
+def load_temp_max():
+    with open('model_temp_max.json','r') as fin :
+        m = model_from_json(fin.read())
+    return m
+
+def load_temp_min() : 
+    with open('model_temp_min.json', 'r') as fin : 
+        m = model_from_json(fin.read())
+    return m
+
+def load_temp(freq, periods) : 
+    max_model = load_temp_max()
+    min_model = load_temp_min()
+    
+
+def load_wind(freq, periods):
+    with open('model_temp_mid.json', 'r') as fin : 
+        m = model_from_json(fin.read())
+    
+    return m
 
 @app.route('/feed')
 def feed():
