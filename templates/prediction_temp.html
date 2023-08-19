@@ -1,0 +1,131 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../static/index.css" rel="stylesheet" type="text/css" media="all">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"> 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.min.js" integrity="sha384-Rx+T1VzGupg4BHQYs2gCW9It+akI2MM/mndMCy36UVfodzcJcF0GGLxZIzObiEfa" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="../static/prediction_styles.css">
+    <style>
+        .scrolling-wrapper{
+            overflow-x: auto;
+        }
+        .subtitle{
+        font-size: 1.25em;
+        opacity: 0.65;
+        }
+        .card-block{
+        height: 80px;
+        background-color: #fff;
+        border: none;
+        background-position: center;
+        background-size: cover;
+        text-align: center;
+        transition: all 0.2s ease-in-out !important;
+        border-radius: 18px;
+        width: 100px;
+        &:hover{
+            transform: translateY(-5px);
+            box-shadow: none;
+            opacity: 0.9;
+        }
+        }
+
+        .card-1{
+        background-color: #4158D0;
+        background-image: linear-gradient(43deg, #4158D0 0%, #C850C0 46%, #FFCC70 100%);
+        }
+
+        .card-2{
+        background-color: #0093E9;
+        background-image: linear-gradient(160deg, #0093E9 0%, #80D0C7 100%);
+        }
+
+        .card-3{
+        background-color: #00DBDE;
+        background-image: linear-gradient(90deg, #00DBDE 0%, #FC00FF 100%);
+        }
+
+        .card-4{
+        background-color: #FBAB7E;
+        background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+        }
+
+        .card-5{
+        background-color: #85FFBD;
+        background-image: linear-gradient(45deg, #85FFBD 0%, #FFFB7D 100%);
+        }
+
+        .card-6{
+        background-color: #FA8BFF;
+        background-image: linear-gradient(45deg, #FA8BFF 0%, #2BD2FF 52%, #2BFF88 90%);
+        }
+        .go-back{
+            background-color: #FBAB7E;
+            background-image: linear-gradient(62deg, #FBAB7E 0%, #F7CE68 100%);
+        }
+
+    </style>
+</head>
+<body>
+      <header id="header" class="hoc clear">
+        <div id="logo" class="fl_left"> 
+          <h1><a href="/" style="text-decoration: none;">Climate Change Prediction</a></h1>
+        </div>
+        <nav class="navbar navbar-expand-lg" style="float: right;">
+          <div class="container-fluid">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+              <ul class="navbar-nav">
+                <li class="nav-item">
+                  <a class="nav-link active" style="color: #fff;font-size: large;" aria-current="page" href="#">Home</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" style="color: #fff;font-size: large;" href="#">Features</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" style="color: #fff;font-size: large;" href="predict">Prediction</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" style="color: #fff;font-size: large;" href="feed">Feedback</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" style="color: #fff;font-size: large;" href="help">Help</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+      </header>
+      
+    <div class="container-fluid">
+        <div class="scrolling-wrapper row flex-row flex-nowrap mt-4 pb-4 pt-2">
+            {% for json_obj in json_data %}
+            <div class="col-1">
+            <div class="card card-block card-2">
+                {{ json_obj["ds"]|tojson|safe }}
+                {{ json_obj["max"]|tojson|safe }}
+                {{ json_obj["min"]|tojson|safe }}
+            </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="container">
+        <div class="">
+            <form action="{{url_for('predict')}}" method="POST">
+                <button type="submit" class="btn btn-primary btn-lg go-back">Get More Data</button>
+            </form>
+        </div>
+    </div>
+<script src="../static/jquery.min.js"></script>
+<script src="../static/jquery.backtotop.js"></script>
+<script src="../static/jquery.mobilemenu.js"></script>
+</body>
+</html>
